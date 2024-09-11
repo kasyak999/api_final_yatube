@@ -10,8 +10,6 @@ from rest_framework.permissions import (
 from rest_framework import filters
 from rest_framework import generics
 from django.contrib.auth import get_user_model
-from rest_framework.response import Response
-from rest_framework import status
 
 
 User = get_user_model()
@@ -55,12 +53,14 @@ class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class FollowViewSet(generics.ListCreateAPIView):
-    queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     pagination_class = None
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('user__username',)
+    search_fields = ('following__username',)
     permission_classes = [IsAuthenticated,]
+
+    def get_queryset(self):
+        return Follow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
