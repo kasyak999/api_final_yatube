@@ -48,5 +48,7 @@ class Comment(models.Model):
 
 class Follow(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='follows')
-    following = models.ManyToManyField(User)
+        User, on_delete=models.CASCADE, related_name='follow_User')
+    # following = models.ManyToManyField(User)
+    following = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='follow_following',)

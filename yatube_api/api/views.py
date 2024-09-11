@@ -5,14 +5,23 @@ from .serializers import (
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from .permission import IsAuthorOrReadOnly
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (
+    IsAuthenticated, IsAuthenticatedOrReadOnly)
+from rest_framework import filters
+from rest_framework import generics
+from django.contrib.auth import get_user_model
+from rest_framework.response import Response
+from rest_framework import status
+
+
+User = get_user_model()
 
 
 class PostViewSet(viewsets.ModelViewSet):
     """получаем список всех постов или создаём новый пост."""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
@@ -22,7 +31,7 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     """получаем список комментариев."""
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly,]
     pagination_class = None
 
     def getting_post(self):
@@ -45,8 +54,13 @@ class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
 
 
-class FollowViewSet(viewsets.ReadOnlyModelViewSet):
-    """получаем информацию о группе."""
+class FollowViewSet(generics.ListCreateAPIView):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     pagination_class = None
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('user__username',)
+    permission_classes = [IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
