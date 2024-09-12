@@ -17,13 +17,19 @@ User = get_user_model()
 
 class PostViewSet(viewsets.ModelViewSet):
     """получаем список всех постов или создаём новый пост."""
-    queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def get_queryset(self):
+        limit = self.request.query_params.get('limit')
+        offset = self.request.query_params.get('offset')
+        if not limit and not offset:
+            self.pagination_class = None
+        return Post.objects.all()
 
 
 class CommentViewSet(viewsets.ModelViewSet):
