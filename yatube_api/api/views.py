@@ -35,7 +35,7 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     """получаем список комментариев."""
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly,]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     pagination_class = None
 
     def getting_post(self):
@@ -63,7 +63,7 @@ class FollowViewSet(generics.ListCreateAPIView):
     pagination_class = None
     filter_backends = (filters.SearchFilter,)
     search_fields = ('following__username',)
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Follow.objects.filter(user=self.request.user)
