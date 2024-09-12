@@ -1,6 +1,4 @@
 from rest_framework import serializers
-
-
 from posts.models import Comment, Post, Group, Follow
 from django.contrib.auth import get_user_model
 
@@ -20,35 +18,13 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         model = Post
 
-    #         "author": "kasyak",
-    #         "pub_date": "2024-09-10T15:49:08.818816Z",
-    #         "group": null,
-    #         "text": "tgtgt",
-    #         "image": null
-
     def get_comments(self, obj):
         return obj.comments.count()
 
 
-    # pub_date = serializers.DateTimeField(read_only=True)
-    # comments = serializers.SerializerMethodField(read_only=True)
-    # group = serializers.SlugRelatedField(
-    #     slug_field='title', read_only=True
-    # )
-
-    # class Meta:
-    #     model = Post
-    #     fields = '__all__'
-
-    # def get_comments(self, obj):
-    #     return obj.comments.count()
-    
-
-
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        read_only=True, slug_field='username'
-    )
+        read_only=True, slug_field='username')
 
     class Meta:
         fields = '__all__'
