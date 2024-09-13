@@ -60,7 +60,7 @@ class Comment(models.Model):
         verbose_name_plural = 'комментарии'
         ordering = ('created',)
         default_related_name = 'comments'
-    
+
     def __str__(self):
         return self.text
 

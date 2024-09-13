@@ -1,5 +1,5 @@
 # TODO:  Напишите свой вариант
-from posts.models import Post, Group
+from posts.models import Post, Group, Follow
 from .serializers import (
     PostSerializer, CommentSerializer, GroupSerializer, FollowSerializer)
 from rest_framework import viewsets
@@ -8,8 +8,10 @@ from .permission import IsAuthorOrReadOnly
 from rest_framework.permissions import (
     IsAuthenticated, IsAuthenticatedOrReadOnly)
 from rest_framework import filters
+from rest_framework import generics
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from rest_framework import mixins
 
 
 User = get_user_model()
@@ -52,6 +54,8 @@ class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupSerializer
 
 
+#  class FollowViewSet(mixins.CreateModelMixin, mixins.ListModelMixin):
+# class FollowViewSet(generics.ListCreateAPIView):
 class FollowViewSet(viewsets.ModelViewSet):
     serializer_class = FollowSerializer
     filter_backends = (filters.SearchFilter,)
