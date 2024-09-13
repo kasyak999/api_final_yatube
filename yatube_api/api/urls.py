@@ -9,13 +9,10 @@ router.register(
     r'posts/(?P<post_pk>\d+)/comments', CommentViewSet,
     basename='post-comments')
 router.register('groups', GroupsViewSet)
-# router.register('follow', FollowViewSet)
+router.register('follow', FollowViewSet, basename='follows')
 
 urlpatterns = [
     path('v1/', include(router.urls)),
-    # базовые, для управления пользователями в Django:
     path('v1/', include('djoser.urls')),
-    # JWT-эндпоинты, для управления JWT-токенами:
     path('v1/', include('djoser.urls.jwt')),
-    path('v1/follow/', FollowViewSet.as_view()),
 ]

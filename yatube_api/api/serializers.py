@@ -18,9 +18,6 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         model = Post
 
-    def get_comments(self, obj):
-        return obj.comments.count()
-
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
