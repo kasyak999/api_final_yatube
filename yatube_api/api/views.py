@@ -8,10 +8,10 @@ from .permission import IsAuthorOrReadOnly
 from rest_framework.permissions import (
     IsAuthenticated, IsAuthenticatedOrReadOnly)
 from rest_framework import filters
-from rest_framework import generics
+# from rest_framework import generics
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import mixins
+# from rest_framework import mixins
 
 
 User = get_user_model()
